@@ -7,6 +7,8 @@ project(Packetto
     LANGUAGES CXX
 )
 
+
+
 add_executable(${PROJECT_NAME}
     src/main.cpp
     # App
@@ -43,3 +45,6 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
     peel::Adw
     peel::Shumate
 )
+
+ # Include GObject bindings
+ target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
