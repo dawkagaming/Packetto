@@ -22,3 +22,24 @@ target_compile_definitions(${PROJECT_NAME} PRIVATE
     PROJECT_NAME=${PROJECT_NAME}
     PROJECT_VERSION="${PROJECT_VERSION}"
 )
+
+# Find required C libraries
+cmake_pkg_config(IMPORT gtk4 REQUIRED NAME Gtk)
+cmake_pkg_config(IMPORT libadwaita-1 REQUIRED NAME Adw)
+cmake_pkg_config(IMPORT shumate-1.0 REQUIRED NAME Shumate)
+
+# Generate C++ bindings using peel
+find_package(peel REQUIRED)
+
+peel_generate(Gtk 4.0 RECURSIVE)
+peel_generate(Adw 1 RECURSIVE)
+peel_generate(Shumate 1.0 RECURSIVE)
+
+target_link_libraries(${PROJECT_NAME} PRIVATE
+    PkgConfig::Gtk
+    PkgConfig::Adw
+    PKGConfig::Shumate
+    peel::Gtk
+    peel::Adw
+    peel::Shumate
+)
