@@ -7,7 +7,10 @@ project(Packetto
     LANGUAGES CXX
 )
 
-
+option(USE_PREGENERATED_PEEL "Use pregenerated peel headers instead of on-demand generation" OFF)
+if(IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR/include/peel})
+    set(USE_PREGENERATED_PEEL ON)
+endif()
 
 add_executable(${PROJECT_NAME}
     src/main.cpp
@@ -26,25 +29,31 @@ target_compile_definitions(${PROJECT_NAME} PRIVATE
 )
 
 # Find required C libraries
-cmake_pkg_config(IMPORT gtk4 REQUIRED NAME Gtk)
-cmake_pkg_config(IMPORT libadwaita-1 REQUIRED NAME Adw)
-cmake_pkg_config(IMPORT shumate-1.0 REQUIRED NAME Shumate)
+find_package(PkgConfig REQUIRED)
 
-# Generate C++ bindings using peel
-find_package(peel REQUIRED)
-
-peel_generate(Gtk 4.0 RECURSIVE)
-peel_generate(Adw 1 RECURSIVE)
-peel_generate(Shumate 1.0 RECURSIVE)
+pkg_check_modules(Gtk REQUIRED IMPORTED_TARGET gtk4)
+pkg_check_modules(Adw REQUIRED IMPORTED_TARGET libadwaita-1)
+pkg_check_modules(Shumate REQUIRED IMPORTED_TARGET shumate-1.0)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE
     PkgConfig::Gtk
     PkgConfig::Adw
-    PKGConfig::Shumate
+    PkgConfig::Shumate
+)
+
+if(USE_PREGENERATED_PEEL)
+    target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
+else()
+    # Generate C++ bindings using peel
+    find_package(peel REQUIRED)
+
+    peel_generate(Gtk 4.0 RECURSIVE)
+    peel_generate(Adw 1 RECURSIVE)
+    peel_generate(Shumate 1.0 RECURSIVE)
+
+    target_link_libraries(${PROJECT_NAME} PRIVATE
     peel::Gtk
     peel::Adw
     peel::Shumate
-)
-
- # Include GObject bindings
- target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
+    )
+endif()
