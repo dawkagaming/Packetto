@@ -2,15 +2,26 @@
 #define APPLICATION_HPP
 
 #include <peel/Adw/Application.h>
+#include <peel/Gio/ApplicationFlags.h>
+#include <peel/RefPtr.h>
+#include <peel/String.h>
+#include <peel/class.h>
+
+#include "../ui/main_window.hpp"
 
 using namespace peel;
 
 class Application : public Adw::Application {
+    PEEL_SIMPLE_CLASS(Application, Adw::Application)
+    friend class Gio::Application;
+
     public:
-        Application();
-        ~Application();
+        static RefPtr<Application> create(String id);
 
     private:
+        void init();
+
+        RefPtr<MainWindow> window;
 };
 
 #endif // APPLICATION_HPP

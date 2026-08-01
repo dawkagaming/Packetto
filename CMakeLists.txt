@@ -17,14 +17,12 @@ add_executable(${PROJECT_NAME}
     # App
     src/app/application.cpp src/app/application.hpp
     # UI
-    src/ui/ui.hpp
     src/ui/main_window.cpp src/ui/main_window.hpp
-    src/ui/settings_window.cpp src/ui/settings_window.hpp
     # Connection
 )
 
 target_compile_definitions(${PROJECT_NAME} PRIVATE
-    PROJECT_NAME=${PROJECT_NAME}
+    PROJECT_NAME="${PROJECT_NAME}"
     PROJECT_VERSION="${PROJECT_VERSION}"
 )
 
@@ -52,8 +50,8 @@ else()
     peel_generate(Shumate 1.0 RECURSIVE)
 
     target_link_libraries(${PROJECT_NAME} PRIVATE
-    peel::Gtk
-    peel::Adw
-    peel::Shumate
+        peel::Gtk
+        peel::Adw
+        peel::Shumate
     )
 endif()
