@@ -29,11 +29,15 @@ target_compile_definitions(${PROJECT_NAME} PRIVATE
 # Find required C libraries
 find_package(PkgConfig REQUIRED)
 
+pkg_check_modules(GLib REQUIRED IMPORTED_TARGET glib-2.0)
+pkg_check_modules(Gio REQUIRED IMPORTED_TARGET gio-2.0)
 pkg_check_modules(Gtk REQUIRED IMPORTED_TARGET gtk4)
 pkg_check_modules(Adw REQUIRED IMPORTED_TARGET libadwaita-1)
 pkg_check_modules(Shumate REQUIRED IMPORTED_TARGET shumate-1.0)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE
+    PkgConfig::GLib
+    PkgConfig::Gio
     PkgConfig::Gtk
     PkgConfig::Adw
     PkgConfig::Shumate
@@ -45,11 +49,15 @@ else()
     # Generate C++ bindings using peel
     find_package(peel REQUIRED)
 
+    peel_generate(GLib 2.0 RECURSIVE)
+    peel_generate(Gio 2.0 RECURSIVE)
     peel_generate(Gtk 4.0 RECURSIVE)
     peel_generate(Adw 1 RECURSIVE)
     peel_generate(Shumate 1.0 RECURSIVE)
 
     target_link_libraries(${PROJECT_NAME} PRIVATE
+        peel:GLib
+        peel:Gio
         peel::Gtk
         peel::Adw
         peel::Shumate

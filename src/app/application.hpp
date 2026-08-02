@@ -19,9 +19,11 @@ class Application : public Adw::Application {
         static RefPtr<Application> create(String id);
 
     private:
-        void init();
+        void init(Class *);
+        
+        void vfunc_activate();
 
-        RefPtr<MainWindow> window;
+        RefPtr<MainWindow> main_window;
 };
 
 #endif // APPLICATION_HPP
