@@ -3,14 +3,25 @@
 
 #include <peel/GLib/functions.h>
 
+#include <peel/Gio/ActionMap.h>
+#include <peel/Gio/SimpleAction.h>
+#include <peel/Gio/Menu.h>
+
+#include <peel/Gtk/MenuButton.h>
+#include <peel/Gtk/ToggleButton.h>
+#include <peel/Gtk/PopoverMenu.h>
+#include <peel/Gtk/License.h>
+
 #include <peel/Adw/Application.h>
 #include <peel/Adw/Window.h>
 #include <peel/Adw/ToolbarView.h>
 #include <peel/Adw/HeaderBar.h>
 #include <peel/Adw/WindowTitle.h>
+#include <peel/Adw/OverlaySplitView.h>
 #include <peel/Adw/ViewStack.h>
 #include <peel/Adw/ViewStackPage.h>
-#include <peel/Adw/ViewSwitcherBar.h>
+#include <peel/Adw/ViewSwitcher.h>
+#include <peel/Adw/AboutDialog.h>
 
 #include <peel/Shumate/SimpleMap.h>
 
@@ -32,13 +43,18 @@ class MainWindow : public Adw::Window {
         RefPtr<Adw::HeaderBar> header;
         RefPtr<Adw::WindowTitle> title;
 
+        RefPtr<Adw::OverlaySplitView> split_view;
         RefPtr<Adw::ViewStack> stack_view;
-        RefPtr<Adw::ViewSwitcherBar> stack_switcher;
+        RefPtr<Adw::ViewSwitcher> stack_switcher;
 
         RefPtr<Shumate::SimpleMap> map;
 
     private:
         void init(Class *);
+
+        void action_settings_window(Gio::SimpleAction *, GLib::Variant *);
+
+        void action_about(Gio::SimpleAction *, GLib::Variant *);
 };
 
 #endif // MAIN_WINDOW_HPP

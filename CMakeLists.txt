@@ -12,12 +12,22 @@ if(IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR/include/peel})
     set(USE_PREGENERATED_PEEL ON)
 endif()
 
+# find_package(Gettext REQUIRED)
+
+# foreach(LANG LANGUAGES)
+#     gettext_process_po_files(${LANG}
+#         ALL
+#         PO_FILES "po/${LANG}.po"
+#     )
+# endforeach()
+
 add_executable(${PROJECT_NAME}
     src/main.cpp
     # App
     src/app/application.cpp src/app/application.hpp
     # UI
     src/ui/main_window.cpp src/ui/main_window.hpp
+    src/ui/settings_window.cpp src/ui/settings_window.hpp
     # Connection
 )
 
