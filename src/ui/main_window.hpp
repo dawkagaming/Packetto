@@ -14,6 +14,8 @@
 #include <peel/Gtk/MenuButton.h>
 #include <peel/Gtk/ToggleButton.h>
 #include <peel/Gtk/PopoverMenu.h>
+#include <peel/Gtk/Box.h>
+#include <peel/Gtk/Orientation.h>
 #include <peel/Gtk/License.h>
 
 #include <peel/Adw/Application.h>
@@ -22,7 +24,6 @@
 #include <peel/Adw/HeaderBar.h>
 #include <peel/Adw/WindowTitle.h>
 #include <peel/Adw/OverlaySplitView.h>
-#include <peel/Adw/BottomSheet.h>
 #include <peel/Adw/AboutDialog.h>
 #include <peel/Adw/PreferencesDialog.h>
 
@@ -46,9 +47,13 @@ class MainWindow : public Adw::Window {
         RefPtr<Adw::HeaderBar> header;
         RefPtr<Adw::WindowTitle> title;
 
-        RefPtr<Adw::OverlaySplitView> split_view;
+        RefPtr<Adw::OverlaySplitView> outer_split_view;
 
-        RefPtr<Adw::BottomSheet> bottom_sheet;
+        RefPtr<Gtk::Box> nav_rail_box;
+
+        RefPtr<Adw::OverlaySplitView> inner_split_view;
+
+        RefPtr<Gtk::Box> nav_menu_box;
 
         RefPtr<Shumate::SimpleMap> map;
 

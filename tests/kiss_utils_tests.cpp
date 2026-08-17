@@ -1,4 +1,4 @@
-#include "../src/connection/kiss_utils.hpp"
+#include "../src/connection/kiss/kiss_utils.hpp"
 
 #include <cstdint>
 #include <vector>

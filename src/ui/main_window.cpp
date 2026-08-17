@@ -1,4 +1,6 @@
 #include "main_window.hpp"
+#include "peel/Adw/OverlaySplitView.h"
+#include "peel/Gtk/Orientation.h"
 
 PEEL_CLASS_IMPL(MainWindow, "MainWindow", Adw::Window)
 
@@ -25,25 +27,46 @@ void MainWindow::init(Class *) {
 
     this -> set_content(this -> toolbar_view);
 
-    // Bottom sheet
-
-    this -> bottom_sheet = Adw::BottomSheet::create();
-
-    this -> toolbar_view -> set_content(this -> bottom_sheet);
-
     // Split view
 
-    this -> split_view = Adw::OverlaySplitView::create();
-    this -> split_view -> set_show_sidebar(false);
-    this -> split_view -> set_sidebar_width_fraction(25);
+    this -> outer_split_view = Adw::OverlaySplitView::create();
+    this -> outer_split_view -> set_show_sidebar(true);
+    this -> outer_split_view -> set_min_sidebar_width(40);
+    this -> outer_split_view -> set_max_sidebar_width(60);
 
-    this -> bottom_sheet -> set_content(this -> split_view);
+    this -> toolbar_view -> set_content(this -> outer_split_view);
 
-    // Header bar and switcher
+    // Outer split
+
+    this -> nav_rail_box = Gtk::Box::create(Gtk::Orientation::VERTICAL, 15);
+
+    this -> outer_split_view -> set_sidebar(this -> nav_rail_box);
+
+    this -> inner_split_view = Adw::OverlaySplitView::create();
+
+    this -> outer_split_view -> set_content(this -> inner_split_view);
+
+    // Inner split
+
+    this -> nav_menu_box = Gtk::Box::create(Gtk::Orientation::VERTICAL, 15);
+
+    this -> inner_split_view -> set_sidebar(this -> nav_menu_box);
+
+    // Header bar
 
     this -> header = Adw::HeaderBar::create();
 
     this -> toolbar_view -> add_top_bar(this -> header);
+
+    // Sidebar switch
+
+    RefPtr<Gtk::ToggleButton> sidebar_button = Gtk::ToggleButton::create();
+
+    sidebar_button -> set_icon_name("sidebar-show-symbolic");
+    
+    peel::GObject::Object::bind_property(this -> inner_split_view, this -> inner_split_view -> prop_show_sidebar(), sidebar_button, sidebar_button -> prop_active(), peel::GObject::BindingFlags::BIDIRECTIONAL | peel::GObject::BindingFlags::SYNC_CREATE);
+
+    this -> header -> pack_start(sidebar_button);
 
     // Right top menu
 
@@ -58,20 +81,10 @@ void MainWindow::init(Class *) {
 
     menu_button -> set_popover(std::move(popover_menu));
     menu_button -> set_icon_name("open-menu-symbolic");
-    menu_button -> set_tooltip_text("Menu");
+    menu_button -> set_tooltip_text(_("Menu"));
     menu_button -> set_focus_on_click(false);
 
     this -> header -> pack_end(std::move(menu_button));
-    
-    // Sidebar switch
-
-    RefPtr<Gtk::ToggleButton> sidebar_button = Gtk::ToggleButton::create();
-
-    sidebar_button -> set_icon_name("sidebar-show-symbolic");
-    
-    peel::GObject::Object::bind_property(split_view, split_view -> prop_show_sidebar(), sidebar_button, sidebar_button -> prop_active(), peel::GObject::BindingFlags::BIDIRECTIONAL | peel::GObject::BindingFlags::SYNC_CREATE);
-
-    this -> header -> pack_start(sidebar_button);
 
     // Map
 
@@ -83,7 +96,7 @@ void MainWindow::init(Class *) {
 
     this -> map -> set_map_source(map_source);
 
-    this -> split_view -> set_content(this -> map);
+    this -> inner_split_view -> set_content(this -> map);
 }
 
 void MainWindow::action_settings_window(Gio::SimpleAction *, GLib::Variant *) {
