@@ -4,6 +4,7 @@
 #include <peel/Adw/Application.h>
 #include <peel/Gio/ApplicationFlags.h>
 #include <peel/RefPtr.h>
+
 #include <peel/String.h>
 #include <peel/class.h>
 

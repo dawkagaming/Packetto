@@ -1,6 +1,10 @@
 #ifndef MAIN_WINDOW_HPP
 #define MAIN_WINDOW_HPP
 
+#include <utility>
+
+#include <glib/gi18n.h>
+
 #include <peel/GLib/functions.h>
 
 #include <peel/Gio/ActionMap.h>
@@ -18,17 +22,16 @@
 #include <peel/Adw/HeaderBar.h>
 #include <peel/Adw/WindowTitle.h>
 #include <peel/Adw/OverlaySplitView.h>
-#include <peel/Adw/ViewStack.h>
-#include <peel/Adw/ViewStackPage.h>
-#include <peel/Adw/ViewSwitcher.h>
+#include <peel/Adw/BottomSheet.h>
 #include <peel/Adw/AboutDialog.h>
+#include <peel/Adw/PreferencesDialog.h>
 
 #include <peel/Shumate/SimpleMap.h>
+#include <peel/Shumate/RasterRenderer.h>
+#include <peel/Shumate/TileDownloader.h>
 
 #include <peel/class.h>
 #include <peel/RefPtr.h>
-
-#include <peel/Gtk/Label.h>
 
 using namespace peel;
 
@@ -44,8 +47,8 @@ class MainWindow : public Adw::Window {
         RefPtr<Adw::WindowTitle> title;
 
         RefPtr<Adw::OverlaySplitView> split_view;
-        RefPtr<Adw::ViewStack> stack_view;
-        RefPtr<Adw::ViewSwitcher> stack_switcher;
+
+        RefPtr<Adw::BottomSheet> bottom_sheet;
 
         RefPtr<Shumate::SimpleMap> map;
 

@@ -12,14 +12,18 @@ if(IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR/include/peel})
     set(USE_PREGENERATED_PEEL ON)
 endif()
 
-# find_package(Gettext REQUIRED)
+include(GNUInstallDirs)
 
-# foreach(LANG LANGUAGES)
-#     gettext_process_po_files(${LANG}
-#         ALL
-#         PO_FILES "po/${LANG}.po"
-#     )
-# endforeach()
+find_package(Gettext REQUIRED)
+
+file(STRINGS po/LINGUAS LANGUAGES)
+
+foreach(LANG ${LANGUAGES})
+    gettext_process_po_files(${LANG}
+        ALL
+        PO_FILES "po/${LANG}.po"
+    )
+endforeach()
 
 add_executable(${PROJECT_NAME}
     src/main.cpp
@@ -27,8 +31,10 @@ add_executable(${PROJECT_NAME}
     src/app/application.cpp src/app/application.hpp
     # UI
     src/ui/main_window.cpp src/ui/main_window.hpp
-    src/ui/settings_window.cpp src/ui/settings_window.hpp
     # Connection
+    # src/connection/kiss_utils.cpp src/connection/kiss_utils.hpp
+    # Misc
+    # src/misc/packet.hpp src/misc/station.hpp
 )
 
 target_compile_definitions(${PROJECT_NAME} PRIVATE
@@ -73,3 +79,11 @@ else()
         peel::Shumate
     )
 endif()
+
+### TESTS
+
+add_executable(kiss_utils_tests tests/kiss_utils_tests.cpp src/connection/kiss_utils.cpp)
+
+add_test(NAME kiss_utils_tests COMMAND kiss_utils_tests)
+
+###
