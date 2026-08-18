@@ -1,8 +1,5 @@
 #include "../src/connection/kiss/kiss_utils.hpp"
 
-#include <cstdint>
-#include <vector>
-
 int main() {
     std::vector<std::uint8_t> data = {0xC0, 0x00, 0x82, 0xA0, 0x9C,
         0x66, 0x70, 0x64, 0x60, 0xA6, 0xA0, 0x72, 0x82,
@@ -17,9 +14,5 @@ int main() {
 
     std::vector<std::uint8_t> escaped_data = KissUtils::Escape(unescaped_data);
 
-    if (escaped_data == escaped_data) {
-        return 0;
-    } else {
-        return 1;
-    };
+    return escaped_data == escaped_data;
 }
