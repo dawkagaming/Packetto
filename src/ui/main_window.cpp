@@ -1,4 +1,5 @@
 #include "main_window.hpp"
+#include "settings_window.hpp"
 
 PEEL_CLASS_IMPL(MainWindow, "MainWindow", Adw::Window)
 
@@ -98,7 +99,7 @@ void MainWindow::init(Class *) {
 }
 
 void MainWindow::action_settings_window(Gio::SimpleAction *, GLib::Variant *) {
-    RefPtr<Adw::PreferencesDialog> preferences_dialog = Adw::PreferencesDialog::create();
+    RefPtr<Adw::PreferencesDialog> preferences_dialog = CreatePreferencesDialog();
 
     preferences_dialog -> present(this);
 }

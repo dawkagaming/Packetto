@@ -35,6 +35,7 @@
 #include <peel/RefPtr.h>
 
 #include "about_window.hpp"
+#include "settings_window.hpp"
 
 using namespace peel;
 

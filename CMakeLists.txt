@@ -32,6 +32,7 @@ add_executable(${PROJECT_NAME}
     # UI
     src/ui/main_window.cpp src/ui/main_window.hpp
     src/ui/about_window.cpp src/ui/about_window.hpp
+    src/ui/settings_window.cpp src/ui/settings_window.hpp
     # Connection
     src/connection/interface.hpp
     ## Connection/KISS
