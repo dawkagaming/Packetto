@@ -1,6 +1,4 @@
 #include "main_window.hpp"
-#include "peel/Adw/OverlaySplitView.h"
-#include "peel/Gtk/Orientation.h"
 
 PEEL_CLASS_IMPL(MainWindow, "MainWindow", Adw::Window)
 
@@ -106,16 +104,9 @@ void MainWindow::action_settings_window(Gio::SimpleAction *, GLib::Variant *) {
 }
 
 void MainWindow::action_about(Gio::SimpleAction *, GLib::Variant *) {
-    RefPtr<Adw::AboutDialog> about_dialog = Adw::AboutDialog::create();
+    // AboutDialog configuration is done in src/ui/about_window.cpp
 
-    about_dialog -> set_application_name(GLib::get_application_name());
-    about_dialog -> set_application_icon("application-x-executable");
-    about_dialog -> set_version(this -> get_application() -> get_version());
-    about_dialog -> set_license_type(Gtk::License::APACHE_2_0);
-    about_dialog -> set_comments(_("A simple APRS client, written in C++ and libadwaita."));
-    about_dialog -> set_support_url("https://github.com/dawkagaming/Packetto/discussions");
-    about_dialog -> set_issue_url("https://github.com/dawkagaming/Packetto/issues");
-    about_dialog -> set_developer_name("Dawid Kulas");
+    RefPtr<Adw::AboutDialog> about_dialog = CreateAboutDialog(this);
 
     about_dialog -> present(this);
 }

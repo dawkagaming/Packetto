@@ -31,7 +31,10 @@ add_executable(${PROJECT_NAME}
     src/app/application.cpp src/app/application.hpp
     # UI
     src/ui/main_window.cpp src/ui/main_window.hpp
+    src/ui/about_window.cpp src/ui/about_window.hpp
     # Connection
+    src/connection/interface.hpp
+    ## Connection/KISS
     # src/connection/kiss_utils.cpp src/connection/kiss_utils.hpp
     # Misc
     # src/misc/packet.hpp src/misc/station.hpp
@@ -82,7 +85,7 @@ endif()
 
 ### TESTS
 
-add_executable(kiss_utils_tests tests/kiss_utils_tests.cpp src/connection/kiss_utils.cpp)
+add_executable(kiss_utils_tests tests/kiss_utils_tests.cpp src/connection/kiss/kiss_utils.cpp)
 
 add_test(NAME kiss_utils_tests COMMAND kiss_utils_tests)
 

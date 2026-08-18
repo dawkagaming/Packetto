@@ -34,6 +34,8 @@
 #include <peel/class.h>
 #include <peel/RefPtr.h>
 
+#include "about_window.hpp"
+
 using namespace peel;
 
 class MainWindow : public Adw::Window {
