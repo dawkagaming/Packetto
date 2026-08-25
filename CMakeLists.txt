@@ -14,6 +14,8 @@ endif()
 
 include(GNUInstallDirs)
 
+### GETTEXT
+
 find_package(Gettext REQUIRED)
 
 file(STRINGS po/LINGUAS LANGUAGES)
@@ -24,6 +26,8 @@ foreach(LANG ${LANGUAGES})
         PO_FILES "po/${LANG}.po"
     )
 endforeach()
+
+###
 
 add_executable(${PROJECT_NAME}
     src/main.cpp
@@ -87,7 +91,9 @@ endif()
 ### TESTS
 
 add_executable(kiss_utils_tests tests/kiss_utils_tests.cpp src/connection/kiss/kiss_utils.cpp)
-
 add_test(NAME kiss_utils_tests COMMAND kiss_utils_tests)
+
+add_executable(aprsis_utils_tests tests/aprsis_utils_tests.cpp src/connection/aprsis/aprsis_utils.cpp)
+add_test(NAME aprsis_utils_tests COMMAND aprsis_utils_tests)
 
 ###

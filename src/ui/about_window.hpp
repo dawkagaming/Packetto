@@ -15,6 +15,8 @@
 
 using namespace peel;
 
-RefPtr<Adw::AboutDialog> CreateAboutDialog(Gtk::Window * parent);
+namespace UI {
+    RefPtr<Adw::AboutDialog> CreateAboutDialog(Gtk::Window * parent);
+};
 
 #endif // ABOUT_WINDOW_HPP

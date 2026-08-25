@@ -12,6 +12,8 @@
 
 using namespace peel;
 
-RefPtr<Adw::PreferencesDialog> CreatePreferencesDialog();
+namespace UI {
+    RefPtr<Adw::PreferencesDialog> CreatePreferencesDialog();
+};
 
 #endif // SETTINGS_WINDOW_HPP

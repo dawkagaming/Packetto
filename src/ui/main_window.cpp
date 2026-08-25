@@ -99,7 +99,9 @@ void MainWindow::init(Class *) {
 }
 
 void MainWindow::action_settings_window(Gio::SimpleAction *, GLib::Variant *) {
-    RefPtr<Adw::PreferencesDialog> preferences_dialog = CreatePreferencesDialog();
+    // PreferencesDialog configuration is done in src/ui/settings_window.cpp
+
+    RefPtr<Adw::PreferencesDialog> preferences_dialog = UI::CreatePreferencesDialog();
 
     preferences_dialog -> present(this);
 }
@@ -107,7 +109,7 @@ void MainWindow::action_settings_window(Gio::SimpleAction *, GLib::Variant *) {
 void MainWindow::action_about(Gio::SimpleAction *, GLib::Variant *) {
     // AboutDialog configuration is done in src/ui/about_window.cpp
 
-    RefPtr<Adw::AboutDialog> about_dialog = CreateAboutDialog(this);
+    RefPtr<Adw::AboutDialog> about_dialog = UI::CreateAboutDialog(this);
 
     about_dialog -> present(this);
 }

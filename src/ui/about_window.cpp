@@ -1,6 +1,6 @@
 #include "about_window.hpp"
 
-RefPtr<Adw::AboutDialog> CreateAboutDialog(Gtk::Window * parent) {
+RefPtr<Adw::AboutDialog> UI::CreateAboutDialog(Gtk::Window * parent) {
     RefPtr<Adw::AboutDialog> about_dialog = Adw::AboutDialog::create();
 
     about_dialog -> set_application_name(GLib::get_application_name());
