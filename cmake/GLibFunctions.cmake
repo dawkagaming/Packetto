@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.31)
 
-find_program(GLIB_COMPILE_RESOURCES glib-compile-resources REQUIRED)
-find_program(GLIB_COMPILE_SCHEMAS glib-compile-schemas REQUIRED)
+find_program(GLIB_COMPILE_RESOURCES_BINARY glib-compile-resources REQUIRED)
+find_program(GLIB_COMPILE_SCHEMAS_BINARY glib-compile-schemas REQUIRED)
 
 function(glib_compile_resources)
     set(flags
@@ -33,6 +33,10 @@ function(glib_compile_resources)
         endif()
     endif()
 
+    if(NOT IS_ABSOLUTE "${arg_FILE}")
+        set(arg_FILE "${CMAKE_CURRENT_SOURCE_DIR}/${arg_FILE}")
+    endif()
+
     # Check file
     if(NOT IS_READABLE "${arg_FILE}")
         message(FATAL_ERROR "[glib_compile_resources]: The input file provided (${arg_FILE}) is not readable!")
@@ -44,40 +48,38 @@ function(glib_compile_resources)
     endif()
 
     # Parse other options
-    set(COMMAND_ARGS)
-
-    if(arg_GENERATE_HEADER)
-        list(APPEND COMMAND_ARGS "--generate-header")
-    endif()
+    set(COMMON_ARGS)
 
     if(arg_MANUAL_REGISTER)
-        list(APPEND COMMAND_ARGS "--manual-register")
+        list(APPEND COMMON_ARGS "--manual-register")
     endif()
 
     if(arg_INTERNAL)
-        list(APPEND COMMAND_ARGS "--internal")
+        list(APPEND COMMON_ARGS "--internal")
     endif()
 
     if(arg_EXTERNAL_DATA)
-        list(APPEND COMMAND_ARGS "--external-data")
+        list(APPEND COMMON_ARGS "--external-data")
     endif()
 
     if(arg_CNAME)
-        list(APPEND COMMAND_ARGS "--c-name" "${arg_CNAME}")
+        list(APPEND COMMON_ARGS "--c-name" "${arg_CNAME}")
     endif()
 
     if(NOT arg_SOURCEDIR)
-        set(arg_SOURCEDIR ${CMAKE_CURRENT_SOURCE_DIR})
+        get_filename_component(arg_SOURCEDIR "${arg_FILE}" DIRECTORY)
     endif()
 
     if(IS_DIRECTORY "${arg_SOURCEDIR}")
-        list(APPEND COMMAND_ARGS "--sourcedir" "${arg_SOURCEDIR}")
+        list(APPEND COMMON_ARGS "--sourcedir" "${arg_SOURCEDIR}")
     else()
         message(FATAL_ERROR "[glib_compile_resources]: Path passed as SOURCEDIR (${arg_SOURCEDIR}) is not a proper path!")
     endif()
 
     if(NOT arg_TARGET)
         set(arg_TARGET "${CMAKE_CURRENT_BINARY_DIR}/gresources.c")
+
+        message(STATUS "TARGET not set, defaulting to ${arg_TARGET}")
     endif()
 
     get_filename_component(FILE_EXTENSION "${arg_TARGET}" LAST_EXT)
@@ -86,31 +88,39 @@ function(glib_compile_resources)
         string(APPEND arg_TARGET ".c")
     endif()
 
-    list(APPEND COMMAND_ARGS "--target" "${arg_TARGET}")
+    list(APPEND SOURCE_ARGS ${COMMON_ARGS} "--target" "${arg_TARGET}" "--generate-source")
 
     # Execute the command
-
-    list(APPEND COMMAND_ARGS "--generate-source")
-
-    list(APPEND COMMAND_ARGS "${arg_FILE}")
-
-    #execute_process(COMMAND "${GLIB_COMPILE_RESOURCES}" ${COMMAND_ARGS} RESULT_VARIABLE EXIT_CODE)
-
     add_custom_command(
-        COMMAND "${GLIB_COMPILE_RESOURCES}" ${COMMAND_ARGS}
         OUTPUT "${arg_TARGET}"
+        COMMAND "${GLIB_COMPILE_RESOURCES_BINARY}" ${SOURCE_ARGS} "${arg_FILE}"
         DEPENDS "${arg_FILE}"
         CODEGEN
-        COMMENT "[glib_compile_resources]: Compiling resources from file ${arg_FILE}"
+        COMMENT "[glib_compile_resources]: Compiling resources from file ${arg_FILE} into source file: ${arg_TARGET}"
     )
 
-    #if(EXIT_CODE EQUAL 0)
-    #    message(STATUS "[glib_compile_resources]: Successfully compiled resourced to file ${arg_TARGET}")
-    #else()
-    #    message(FATAL_ERROR "[glib_compile_resources]: glib-compile-resources failed with exit code ${EXIT_CODE}")
-    #endif
+    if(arg_GENERATE_HEADER)
+        get_filename_component(TARGET_DIR "${arg_TARGET}" DIRECTORY)
 
-    set("${arg_OUTPUT_VAR}" "${arg_TARGET}" PARENT_SCOPE)
+        get_filename_component(TARGET_HEADER "${arg_TARGET}" NAME_WLE)
+        
+        set(TARGET_HEADER "${TARGET_DIR}/${TARGET_HEADER}.h")
+
+        list(APPEND HEADER_ARGS ${COMMON_ARGS} "--target" "${TARGET_HEADER}" "--generate-header")
+
+        add_custom_command(
+            OUTPUT "${TARGET_HEADER}"
+            COMMAND "${GLIB_COMPILE_RESOURCES_BINARY}" ${HEADER_ARGS} "${arg_FILE}"
+            DEPENDS "${arg_FILE}"
+            CODEGEN
+            COMMENT "[glib_compile_resources]: Compiling resources from file ${arg_FILE} into header file: ${TARGET_HEADER}"
+        )
+    endif()
+
+
+    list(APPEND OUTPUT_FILES "${arg_TARGET}" "${TARGET_HEADER}")
+
+    set("${arg_OUTPUT_VAR}" "${OUTPUT_FILES}" PARENT_SCOPE)
 endfunction()
 
 function(glib_compile_schemas)
