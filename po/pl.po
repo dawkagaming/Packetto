@@ -6,24 +6,25 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-08-29 13:27+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"PO-Revision-Date: 2026-08-29 13:30+0200\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: pl\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 3.6\n"
 
 #: src/ui/main_window.cpp:79
 msgid "Settings"
-msgstr ""
+msgstr "Ustawienia"
 
 #: src/ui/main_window.cpp:80
 msgid "About"
-msgstr ""
+msgstr "O aplikacji"
 
 #: src/ui/main_window.cpp:88
 msgid "Menu"
@@ -31,5 +32,4 @@ msgstr ""
 
 #: src/ui/about_window.cpp:10
 msgid "A simple APRS client, written in C++ and libadwaita."
-msgstr ""
-s
+msgstr "Prosty klient APRS, napisany przy użyciu C++ i libadwaita."
