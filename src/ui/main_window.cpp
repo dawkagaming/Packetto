@@ -1,5 +1,4 @@
 #include "main_window.hpp"
-#include "settings_window.hpp"
 
 PEEL_CLASS_IMPL(MainWindow, "MainWindow", Adw::Window)
 
@@ -18,44 +17,43 @@ RefPtr<MainWindow> MainWindow::create(Gtk::Application * app) {
 }
 
 void MainWindow::init(Class *) {
-    this -> set_default_size(800, 600);
+    set_default_size(800, 600);
 
     // Toolbar view
+    toolbar_view = Adw::ToolbarView::create();
 
-    this -> toolbar_view = Adw::ToolbarView::create();
-
-    this -> set_content(this -> toolbar_view);
+    set_content(toolbar_view);
 
     // Split view
 
-    this -> outer_split_view = Adw::OverlaySplitView::create();
-    this -> outer_split_view -> set_show_sidebar(true);
-    this -> outer_split_view -> set_min_sidebar_width(40);
-    this -> outer_split_view -> set_max_sidebar_width(60);
+    outer_split_view = Adw::OverlaySplitView::create();
+    outer_split_view -> set_show_sidebar(true);
+    outer_split_view -> set_min_sidebar_width(40);
+    outer_split_view -> set_max_sidebar_width(60);
 
-    this -> toolbar_view -> set_content(this -> outer_split_view);
+    toolbar_view -> set_content(outer_split_view);
 
     // Outer split
 
-    this -> nav_rail_box = Gtk::Box::create(Gtk::Orientation::VERTICAL, 15);
+    nav_rail_box = Gtk::Box::create(Gtk::Orientation::VERTICAL, 15);
 
-    this -> outer_split_view -> set_sidebar(this -> nav_rail_box);
+    outer_split_view -> set_sidebar(nav_rail_box);
 
-    this -> inner_split_view = Adw::OverlaySplitView::create();
+    inner_split_view = Adw::OverlaySplitView::create();
 
-    this -> outer_split_view -> set_content(this -> inner_split_view);
+    outer_split_view -> set_content(inner_split_view);
 
     // Inner split
 
-    this -> nav_menu_box = Gtk::Box::create(Gtk::Orientation::VERTICAL, 15);
+    nav_menu_box = Gtk::Box::create(Gtk::Orientation::VERTICAL, 15);
 
-    this -> inner_split_view -> set_sidebar(this -> nav_menu_box);
+    inner_split_view -> set_sidebar(nav_menu_box);
 
     // Header bar
 
-    this -> header = Adw::HeaderBar::create();
+    header = Adw::HeaderBar::create();
 
-    this -> toolbar_view -> add_top_bar(this -> header);
+    toolbar_view -> add_top_bar(header);
 
     // Sidebar switch
 
@@ -63,9 +61,9 @@ void MainWindow::init(Class *) {
 
     sidebar_button -> set_icon_name("sidebar-show-symbolic");
     
-    peel::GObject::Object::bind_property(this -> inner_split_view, this -> inner_split_view -> prop_show_sidebar(), sidebar_button, sidebar_button -> prop_active(), peel::GObject::BindingFlags::BIDIRECTIONAL | peel::GObject::BindingFlags::SYNC_CREATE);
+    peel::GObject::Object::bind_property(inner_split_view, inner_split_view -> prop_show_sidebar(), sidebar_button, sidebar_button -> prop_active(), peel::GObject::BindingFlags::BIDIRECTIONAL | peel::GObject::BindingFlags::SYNC_CREATE);
 
-    this -> header -> pack_start(sidebar_button);
+    header -> pack_start(sidebar_button);
 
     // Right top menu
 
@@ -83,19 +81,19 @@ void MainWindow::init(Class *) {
     menu_button -> set_tooltip_text(_("Menu"));
     menu_button -> set_focus_on_click(false);
 
-    this -> header -> pack_end(std::move(menu_button));
+    header -> pack_end(std::move(menu_button));
 
     // Map
 
-    this -> map = Shumate::SimpleMap::create();
+    map = Shumate::SimpleMap::create();
 
     RefPtr<Shumate::TileDownloader> tile_downloader = Shumate::TileDownloader::create("https://tile.openstreetmap.org/{z}/{x}/{y}.png");
 
     RefPtr<Shumate::RasterRenderer> map_source = Shumate::RasterRenderer::create(tile_downloader);
 
-    this -> map -> set_map_source(map_source);
+    map -> set_map_source(map_source);
 
-    this -> inner_split_view -> set_content(this -> map);
+    inner_split_view -> set_content(map);
 }
 
 void MainWindow::action_settings_window(Gio::SimpleAction *, GLib::Variant *) {

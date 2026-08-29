@@ -1,6 +1,7 @@
 #ifndef STATION_HPP
 #define STATION_HPP
 
+#include <memory>
 #include <string>
 #include <vector>
 
@@ -12,7 +13,7 @@ using namespace peel;
 
 struct Station {
     std::string callsign;
-    std::vector<Packet *> packets;
+    std::vector<std::shared_ptr<Packet>> packets;
     std::vector<Shumate::Coordinate> path;
 };
 

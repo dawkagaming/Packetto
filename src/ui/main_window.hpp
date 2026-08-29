@@ -45,6 +45,17 @@ class MainWindow : public Adw::Window {
     public:
         static RefPtr<MainWindow> create(Gtk::Application * app);
 
+    private:
+        void init(Class *);
+
+        // Actions
+
+        void action_settings_window(Gio::SimpleAction *, GLib::Variant *);
+
+        void action_about(Gio::SimpleAction *, GLib::Variant *);
+
+        // UI elements
+
         RefPtr<Adw::ToolbarView> toolbar_view;
 
         RefPtr<Adw::HeaderBar> header;
@@ -59,13 +70,6 @@ class MainWindow : public Adw::Window {
         RefPtr<Gtk::Box> nav_menu_box;
 
         RefPtr<Shumate::SimpleMap> map;
-
-    private:
-        void init(Class *);
-
-        void action_settings_window(Gio::SimpleAction *, GLib::Variant *);
-
-        void action_about(Gio::SimpleAction *, GLib::Variant *);
 };
 
 #endif // MAIN_WINDOW_HPP
