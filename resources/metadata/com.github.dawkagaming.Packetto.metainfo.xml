@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>com.github.dawkagaming.Packetto</id>
+  
+  <name>Packetto</name>
+  <summary>A simple APRS client, written in C++ and libadwaita.</summary>
+  
+  <metadata_license>MIT</metadata_license>
+  <project_license>Apache-2.0</project_license>
+  
+  <description>
+    <p>
+      A simple APRS client, written in C++ and libadwaita.
+    </p>
+  </description>
+  
+  <launchable type="desktop-id">com.github.dawkagaming.Packetto.desktop</launchable>
+</component>
