@@ -1,0 +1,45 @@
+name: Build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+    build-debian-sid:
+      runs-on: ubuntu-latest
+      container: debian:sid
+
+      steps:
+        - name: Checkout repository
+          uses: actions/checkout@v4
+
+        - name: Install dependencies
+          run: |
+            apt -U install -y \
+              build-essential \
+              cmake \
+              libglib2.0-dev \
+              libgio-2.0-dev \
+              libgtk-4-dev \
+              libadwaita-1-dev \
+              libshumate-dev
+
+        - name: Install peel
+          run: |
+            apt -U install wget && \
+            wget -o peel_salsa_ci.deb https://salsa.debian.org/gnome-team/extras/peel/-/jobs/10212437/artifacts/raw/debian/output/peel_0.0~git20260815.f463200-1+salsaci+20260827+49_all.deb?inline=false && \
+            apt -U install ./peel_salsa_ci.deb
+
+        - name: Configure
+          run: |
+            cmake -B build
+
+        - name: Build
+          run: |
+            cmake --build build
+
+        - name: Test
+          run: |
+            ctest --test-dir build
