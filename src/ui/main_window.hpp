@@ -17,6 +17,7 @@
 #include <peel/Gtk/Box.h>
 #include <peel/Gtk/Orientation.h>
 #include <peel/Gtk/License.h>
+#include <peel/Gtk/PackType.h>
 
 #include <peel/Adw/Application.h>
 #include <peel/Adw/Window.h>
@@ -24,8 +25,6 @@
 #include <peel/Adw/HeaderBar.h>
 #include <peel/Adw/WindowTitle.h>
 #include <peel/Adw/OverlaySplitView.h>
-#include <peel/Adw/AboutDialog.h>
-#include <peel/Adw/PreferencesDialog.h>
 
 #include <peel/Shumate/SimpleMap.h>
 #include <peel/Shumate/RasterRenderer.h>
@@ -56,18 +55,11 @@ class MainWindow : public Adw::Window {
 
         // UI elements
 
+        RefPtr<Adw::OverlaySplitView> split_view;
+
         RefPtr<Adw::ToolbarView> toolbar_view;
 
-        RefPtr<Adw::HeaderBar> header;
-        RefPtr<Adw::WindowTitle> title;
-
-        RefPtr<Adw::OverlaySplitView> outer_split_view;
-
-        RefPtr<Gtk::Box> nav_rail_box;
-
-        RefPtr<Adw::OverlaySplitView> inner_split_view;
-
-        RefPtr<Gtk::Box> nav_menu_box;
+        RefPtr<Adw::HeaderBar> header_bar;
 
         RefPtr<Shumate::SimpleMap> map;
 };

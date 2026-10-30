@@ -17,53 +17,27 @@ RefPtr<MainWindow> MainWindow::create(Gtk::Application * app) {
 }
 
 void MainWindow::init(Class *) {
-    set_default_size(800, 600);
+    // Creating UI
 
     // Toolbar view
-    toolbar_view = Adw::ToolbarView::create();
 
-    set_content(toolbar_view);
+    toolbar_view = Adw::ToolbarView::create();
 
     // Split view
 
-    outer_split_view = Adw::OverlaySplitView::create();
-    outer_split_view -> set_show_sidebar(true);
-    outer_split_view -> set_min_sidebar_width(40);
-    outer_split_view -> set_max_sidebar_width(60);
-
-    toolbar_view -> set_content(outer_split_view);
-
-    // Outer split
-
-    nav_rail_box = Gtk::Box::create(Gtk::Orientation::VERTICAL, 15);
-
-    outer_split_view -> set_sidebar(nav_rail_box);
-
-    inner_split_view = Adw::OverlaySplitView::create();
-
-    outer_split_view -> set_content(inner_split_view);
-
-    // Inner split
-
-    nav_menu_box = Gtk::Box::create(Gtk::Orientation::VERTICAL, 15);
-
-    inner_split_view -> set_sidebar(nav_menu_box);
+    split_view = Adw::OverlaySplitView::create();
 
     // Header bar
 
-    header = Adw::HeaderBar::create();
+    header_bar = Adw::HeaderBar::create();
 
-    toolbar_view -> add_top_bar(header);
-
-    // Sidebar switch
+    // Sidebar button
 
     RefPtr<Gtk::ToggleButton> sidebar_button = Gtk::ToggleButton::create();
 
     sidebar_button -> set_icon_name("sidebar-show-symbolic");
-    
-    peel::GObject::Object::bind_property(inner_split_view, inner_split_view -> prop_show_sidebar(), sidebar_button, sidebar_button -> prop_active(), peel::GObject::BindingFlags::BIDIRECTIONAL | peel::GObject::BindingFlags::SYNC_CREATE);
 
-    header -> pack_start(sidebar_button);
+    header_bar -> pack_start(sidebar_button);
 
     // Right top menu
 
@@ -81,33 +55,38 @@ void MainWindow::init(Class *) {
     menu_button -> set_tooltip_text(_("Menu"));
     menu_button -> set_focus_on_click(false);
 
-    header -> pack_end(std::move(menu_button));
+    header_bar -> pack_end(std::move(menu_button));
 
     // Map
 
     map = Shumate::SimpleMap::create();
-
     RefPtr<Shumate::TileDownloader> tile_downloader = Shumate::TileDownloader::create("https://tile.openstreetmap.org/{z}/{x}/{y}.png");
-
     RefPtr<Shumate::RasterRenderer> map_source = Shumate::RasterRenderer::create(tile_downloader);
-
     map -> set_map_source(map_source);
+    
+    // Packing the UI up
 
-    inner_split_view -> set_content(map);
+    set_default_size(800, 600);
+    set_content(toolbar_view);
+
+    toolbar_view -> set_content(split_view);
+    toolbar_view -> add_top_bar(header_bar);
+
+    split_view -> set_content(map);
+
+    // Binding properties
+
+    peel::GObject::Object::bind_property(split_view, split_view -> prop_show_sidebar(), sidebar_button, sidebar_button -> prop_active(), peel::GObject::BindingFlags::BIDIRECTIONAL | peel::GObject::BindingFlags::SYNC_CREATE);
 }
 
 void MainWindow::action_settings_window(Gio::SimpleAction *, GLib::Variant *) {
-    // PreferencesDialog configuration is done in src/ui/settings_window.cpp
+    RefPtr<SettingsWindow> settings_window = SettingsWindow::create();
 
-    RefPtr<Adw::PreferencesDialog> preferences_dialog = UI::CreatePreferencesDialog();
-
-    preferences_dialog -> present(this);
+    settings_window -> present(this);
 }
 
 void MainWindow::action_about(Gio::SimpleAction *, GLib::Variant *) {
-    // AboutDialog configuration is done in src/ui/about_window.cpp
+    RefPtr<Adw::AboutDialog> about_window = AboutWindow::create(this);
 
-    RefPtr<Adw::AboutDialog> about_dialog = UI::CreateAboutDialog(this);
-
-    about_dialog -> present(this);
+    about_window -> present(this);
 }

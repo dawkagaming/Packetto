@@ -4,11 +4,11 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 project(Packetto
     VERSION "0.1"
-    LANGUAGES CXX
+    LANGUAGES CXX C
 )
 
 option(USE_PREGENERATED_PEEL "Use pregenerated peel headers instead of on-demand generation" OFF)
-if(IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR/include/peel})
+if(IS_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/include/peel")
     set(USE_PREGENERATED_PEEL ON)
 endif()
 
@@ -29,6 +29,17 @@ endforeach()
 
 ###
 
+### RESOURCES
+
+include(cmake/GLibFunctions.cmake)
+
+gnome_compile_resources(
+    FILE resources/icons/actions/icons.gresource.xml
+    OUTPUT_VAR RESOURCES_SOURCE
+)
+
+###
+
 add_executable(${PROJECT_NAME}
     src/main.cpp
     # App
@@ -38,11 +49,14 @@ add_executable(${PROJECT_NAME}
     src/ui/about_window.cpp src/ui/about_window.hpp
     src/ui/settings_window.cpp src/ui/settings_window.hpp
     # Connection
-    src/connection/interface.hpp
+    ## Connection/APRSIS
     ## Connection/KISS
     # src/connection/kiss_utils.cpp src/connection/kiss_utils.hpp
+    ## Connection/AGWPE
     # Misc
     # src/misc/packet.hpp src/misc/station.hpp
+    # Resources
+    ${RESOURCES_SOURCE}
 )
 
 target_compile_definitions(${PROJECT_NAME} PRIVATE

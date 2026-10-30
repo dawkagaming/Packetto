@@ -1,7 +1,13 @@
 #include "settings_window.hpp"
 
-RefPtr<Adw::PreferencesDialog> UI::CreatePreferencesDialog() {
-    RefPtr<Adw::PreferencesDialog> preferences_dialog = Adw::PreferencesDialog::create();
+PEEL_CLASS_IMPL(SettingsWindow, "SettingsWindow", Adw::PreferencesDialog)
 
-    return preferences_dialog;
+RefPtr<SettingsWindow> SettingsWindow::create() {
+    return Object::create<SettingsWindow>();
+}
+
+void SettingsWindow::Class::init() {}
+
+void SettingsWindow::init(Class *) {
+
 }
